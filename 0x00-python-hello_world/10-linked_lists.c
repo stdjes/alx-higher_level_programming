@@ -1,60 +1,63 @@
-/*
- * check_cycle - checks if a singly linked list has
- * a cycle in it
- * @list: pointer to the list
- *
- * Description:
- * This function determines whether a given singly linked list
- * has a cycle or not.
- * It uses Floyd's cycle-finding algorithm,
- * where two pointers traverse the list,
- * one moving at twice the speed of the other.
- * If there's a cycle, the two pointers
- * will eventually meet at the same node.
- * If no cycle is found, they will reach the end of the list.
- *
- * Return:
- * 0 if there is no cycle,
- * 1 if there is a cycle
+#include <stdio.h>
+#include <stdlib.h>
+#include "lists.h"
+
+/**
+ * print_listint - prints all elements of a listint_t list
+ * @h: pointer to head of list
+ * Return: number of nodes
  */
-int check_cycle(listint_t *list)
+size_t print_listint(const listint_t *h)
 {
-    listint_t *p2;   /* Pointer that moves twice as fast */
-    listint_t *prev; /* Pointer to track the previous position */
+    const listint_t *current;
+    unsigned int n; /* number of nodes */
 
-    p2 = list;       /* Initialize both pointers to the beginning */
-    prev = list;
-
-    while (list && p2 && p2->next)
+    current = h;
+    n = 0;
+    while (current != NULL)
     {
-        list = list->next;         /* Move one step at a time */
-        p2 = p2->next->next;       /* Move two steps at a time */
-
-        if (list == p2)
-        {
-            list = prev;      /* Reset the 'list' pointer to the beginning */
-            prev =  p2;         /* Update 'prev' to the current position */
-            /* Traverse the list to find the node where the cycle begins */
-            while (1)
-            {
-                p2 = prev;
-                /**
-                * Move 'p2' until it reaches the end of the list or
-                * returns to the 'prev' position (indicating the cycle's start)
-                */
-                while (p2->next != list && p2->next != prev)
-                {
-                    p2 = p2->next;
-                }
-
-                /* If 'p2' reaches 'list', a cycle is found */
-                if (p2->next == list)
-                    break;
-
-                list = list->next;
-            }
-            return (1); /* Return 1 to indicate a cycle is detected */
-        }
+        printf("%i\n", current->n);
+        current = current->next;
+        n++;
     }
-    return (0); /* Return 0 to indicate no cycle is detected */
+
+    return (n);
+}
+
+/**
+ * add_nodeint - adds a new node at the beginning of a listint_t list
+ * @head: pointer to a pointer of the start of the list
+ * @n: integer to be included in node
+ * Return: address of the new element or NULL if it fails
+ */
+listint_t *add_nodeint(listint_t **head, const int n)
+{
+    listint_t *new;
+
+    new = malloc(sizeof(listint_t));
+    if (new == NULL)
+        return (NULL);
+
+    new->n = n;
+    new->next = *head;
+    *head = new;
+
+    return (new);
+}
+
+/**
+ * free_listint - frees a listint_t list
+ * @head: pointer to list to be freed
+ * Return: void
+ */
+void free_listint(listint_t *head)
+{
+    listint_t *current;
+
+    while (head != NULL)
+    {
+        current = head;
+        head = head->next;
+        free(current);
+    }
 }
