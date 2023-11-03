@@ -1,10 +1,14 @@
 #!/usr/bin/python3
-"""Defines a base geometry class BaseGeometry."""
+"""
+    This module returns the list of available attributes
+    and methods of an object
+""""""
+    This module returns the list of available attributes
+    and methods of an object
+"""
 
 
 class BaseGeometry:
-    """Represent base geometry."""
-
+    """ Empty class """
     def area(self):
-        """Not implemented."""
-        raise Exception("area() is not implemented yet")
+        raise Exception("area() is not implemented")
