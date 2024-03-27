@@ -1,12 +1,24 @@
 #!/usr/bin/node
+
 const request = require('request');
-request(process.argv[2], function (error, response, body) {
-  if (!error) {
-    const results = JSON.parse(body).results;
-    console.log(results.reduce((count, movie) => {
-      return movie.characters.find((character) => character.endsWith('/18/'))
-        ? count + 1
-        : count;
-    }, 0));
+
+const apiUrl = process.argv[2];
+const character = { id: 18, name: 'Wedge Antilles' };
+
+request(apiUrl, (err, res, body) => {
+  if (!err && res.statusCode === 200) {
+    body = JSON.parse(body);
+    let count = 0;
+    for (const film of body.results) {
+      const characters = film.characters;
+      for (let i = 0; i < characters.length; i++) {
+        if (characters[i].endsWith(character.id + '/')) {
+          count++;
+        }
+      }
+    }
+    console.log(count);
+  } else {
+    console.log(err);
   }
 });
